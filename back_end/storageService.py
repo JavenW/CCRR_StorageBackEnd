@@ -2,6 +2,7 @@ import pymysql
 import os
 import boto3
 
+
 class StorageService:
 
     def __int__(self):
@@ -26,23 +27,25 @@ class StorageService:
         items[item] = expired_date
         table.put_item(
             Item={
-                    'email': email,
-                    'items': items
-                }
+                'email': email,
+                'items': items
+            }
         )
 
     @staticmethod
     def get_items(email):
-
-        table = StorageService._get_connection()
-        response = table.get_item(
-            Key={
-                'email': email
-            }
-        )
-        if 'Item' in response:
-            return response['Item']['items']
-        return {}
+        try:
+            table = StorageService._get_connection()
+            response = table.get_item(
+                Key={
+                    'email': email
+                }
+            )
+            if 'Item' in response:
+                return response['Item']['items']
+            return {}
+        except:
+            return {}
 
     @staticmethod
     def remove_item(email, item):
@@ -52,10 +55,11 @@ class StorageService:
         items.pop(item, None)
         table.put_item(
             Item={
-                    'userid': email,
-                    'items': items
-                }
+                'email': email,
+                'items': items
+            }
         )
+
 
 # StorageService.insert_item("11112",'apple', '4567')
 print(StorageService.get_items("jw4156@columbia.edu"))
@@ -67,5 +71,3 @@ print(StorageService.get_items("jw4156@columbia.edu"))
 #     IdentityType='EmailAddress'
 # )
 # print(res['Identities'])
-
-
