@@ -12,9 +12,12 @@ CORS(app)
 
 @app.route("/getitems/<email>", methods=["GET"])
 def get_all_items(email):
+    
     result = StorageService.get_items(email)
 
     if result or result == {}:
+        print(result)
+        result = {k: v for k, v in sorted(result.items(), key=lambda item: item[1])}
         rsp = Response(json.dumps(result), status=200,
                        content_type="application.json")
     else:
@@ -39,6 +42,17 @@ def delete_item():
     item = request.args.get('item', None)
     print(email, item)
     StorageService.remove_item(email, item)
+
+    return Response(json.dumps({}), status=200, content_type="application.json")
+
+
+@app.route("/edititem", methods=["POST"])
+def edit_item():
+    email = request.args.get('email', None)
+    item = request.args.get('item', None)
+    expired_date = request.args.get('expdate', None)
+    print(email,item,expired_date)
+    StorageService.insert_item(email, item, expired_date)
 
     return Response(json.dumps({}), status=200, content_type="application.json")
 
