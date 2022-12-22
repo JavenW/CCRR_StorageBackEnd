@@ -62,7 +62,6 @@ class StorageService:
 
 
 # StorageService.insert_item("11112",'apple', '4567')
-print(StorageService.get_items("jw4156@columbia.edu"))
 # StorageService.remove_item("11111","apple")
 
 
